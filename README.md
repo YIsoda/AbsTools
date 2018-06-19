@@ -59,11 +59,13 @@ Integration Time (usec): 60000 (USB4F06998)
 ...
 ```
 
-※ウイルスバスターにブロックされるようです（署名とかなにもしてないので。すいません...）。［開く］を押すと実行できると思います。
+![処理前と後の比較](image.png)
 
+※ウイルスバスターにブロックされるようです（署名とかなにもしてないので。すいません...）。［開く］を押すと実行できると思います。
+また，Windows10以外では確認していませんので，動かないかもしれません（.NET Framework 4.5以上必要）
 
 ### macOS Commamd Line版
-zipを落として展開し，中のAbsConvertCoreを実行すると動くかも
+![zip](https://github.com/YIsoda/AbsTools/releases/download/v0.1/AbsSimplifier_osx-x64.zip)を落として展開し，中のAbsConvertCoreを実行すると動くかも
 
 
 
