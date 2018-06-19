@@ -9,12 +9,12 @@
   - （パッケージ化の方法がわからないけど暫定で）macOS Command Line
  
 ## 使い方
-生データのテキストファイルから，波長を1 nmごと，300-800 nmの範囲に対応させた吸光度のデータのみを含むファイルを生成します。
+生データのテキストファイルから，波長を1 nmごと，300-799 nmの範囲に対応させた吸光度のデータのみを含むファイルを生成します。
 ### Windows Command Line版
 
 [リリースページ](https://github.com/YIsoda/AbsTools/releases)から[AbsSimplifier.exe](https://github.com/YIsoda/AbsTools/releases/download/v0.1/AbsSimplifier.exe)をダウンロードして，適当な場所においてください。
 
-引数に生データファイルの相対or絶対パスを指定して実行ください（複数のファイルを指定可能です）。実行するとファイル名に“-simplified”を付けたファイルが生成されます。
+PowerShellまたはコマンドプロンプト上で実行します。引数に生データファイルの相対or絶対パスを指定して実行ください（複数のファイルを指定可能です）。実行するとファイル名に“-simplified”を付けたファイルが生成されます。
 
 ```powershell
 PS> AbsSimplifier.exe absData1.txt absData2.txt ...
@@ -65,7 +65,7 @@ Integration Time (usec): 60000 (USB4F06998)
 また，Windows10以外では確認していませんので，動かないかもしれません（.NET Framework 4.5以上必要）
 
 ### macOS Commamd Line版
-![zip](https://github.com/YIsoda/AbsTools/releases/download/v0.1/AbsSimplifier_osx-x64.zip)を落として展開し，中のAbsConvertCoreを実行すると動くかも
+[zip](https://github.com/YIsoda/AbsTools/releases/download/v0.1/AbsSimplifier_osx-x64.zip)を落として展開し，中のAbsConvertCoreを実行すると動くかも
 
 
 
