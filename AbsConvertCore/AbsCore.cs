@@ -3,9 +3,75 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using static System.Console;
+using System.Text.RegularExpressions;
+
 
 namespace AbsConvertCore
 {
+	using static System.IO.File;
+
+#if NETCOREAPP2_0
+
+#else
+	public static class EnumerableExtension
+	{
+		public static IEnumerable<T> SkipLast<T>(this IEnumerable<T> source, int count)
+		{
+			return source.Take(source.Count() - count);
+		}
+	}
+#endif
+
+	static class CommandLineApplication
+	{
+		public static void RunApplication(string[] args)
+		{
+			foreach (var arg in args)
+			{
+				var info = new FileInfo(arg);
+
+				if (!info.Exists)
+				{
+					WriteLine($"\t{info.Name}: エラー: ファイルが存在しません");
+					continue;
+				}
+
+
+				if (
+					!ReadLines(arg).Skip(30).Take(10)
+					.All(x => Regex.IsMatch(x, @"[0-9\.]*\t[\-0-9\.]*"))
+					)
+				{
+					WriteLine($"\t{info.Name}: エラー: データの形式が間違っていないか確認してください");
+					continue;
+				}
+
+				var data = ReadLines(arg).Skip(18).SkipLast(2)
+					.Select(x =>
+					{
+						var t = x.Split('\t');
+#if NETCOREAPP2_0
+						return (double.Parse(t[0]), double.Parse(t[1]));
+#else
+						return new { Item1 = double.Parse(t[0]), Item2 = double.Parse(t[1]) };
+#endif
+					});
+				var absdata = new Absdata(
+#if NETCOREAPP2_0
+					data.Select(x => x.Item1), data.Select(x => x.Item2)
+#else
+					data.Select(x => x.Item1), data.Select(x => x.Item2)
+#endif
+					);
+				var newFileName = info.DirectoryName + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(info.Name) + "-simplified.txt";
+
+				WriteAllLines(newFileName, absdata.GetConvertedAbs().Select(x => x.ToString("0.0000")));
+				WriteLine($"\t{arg} \t->\t {newFileName}");
+			}
+		}
+	}
 	class Absdata
 	{
 
@@ -49,7 +115,7 @@ namespace AbsConvertCore
 #if NETCOREAPP2_0
 			(wavelen, abs)
 #else
-			new {wavelen,abs}
+			new { wavelen, abs }
 #endif
 			)
 				.SkipWhile((x) => x.wavelen < this.MinWaveLength - 1)
@@ -58,7 +124,7 @@ namespace AbsConvertCore
 
 			var range = Enumerable.Range(MinWaveLength, MaxWaveLen - MinWaveLength + 1).ToList();
 
-			var prev=zippedEnumerable.First();
+			var prev = zippedEnumerable.First();
 			int rangeindex = 0;
 
 			foreach (var item in zippedEnumerable.Skip(1))
@@ -71,7 +137,7 @@ namespace AbsConvertCore
 				}
 				prev = item;
 			}
-				
+
 		}
 
 		public int MinWaveLength { get; }
