@@ -44,7 +44,7 @@ namespace AbsConvertCore
 					);
 				var newFileName = info.DirectoryName + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(info.Name) + "-simplified.txt";
 
-				WriteAllLines(newFileName, absdata.GetConvertedAbs().Select(x => x.ToString()));
+				WriteAllLines(newFileName, absdata.GetConvertedAbs().Select(x => x.ToString("0.0000")));
 				WriteLine($"\t{arg} \t->\t {newFileName}");
 			}
 

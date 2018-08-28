@@ -72,7 +72,6 @@ namespace AbsConvertCore
 				prev = item;
 			}
 				
-			//throw new NotImplementedException();
 		}
 
 		public int MinWaveLength { get; }
