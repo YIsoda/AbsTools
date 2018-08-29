@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AbsConvertCore": {
+      "commandName": "Project",
+      "commandLineArgs": "--help"
+    }
+  }
+}

@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 namespace AbsConvertCore
 {
 	using static System.IO.File;
-
+	using CommandLine;
 #if NETCOREAPP2_0
 
 #else
@@ -24,54 +24,89 @@ namespace AbsConvertCore
 	}
 #endif
 
-	static class CommandLineApplication
+	public class DataFormatChecker
+	{
+		public DataFormatChecker() { }
+
+		public bool IsValid(string path)
+		{
+			return !ReadLines(path).Skip(30).Take(10)
+					.All(x => Regex.IsMatch(x, @"[0-9\.]*\t[\-0-9\.]*"));
+		}
+	}
+	/// <summary>
+	/// コマンドラインオプション
+	/// </summary>
+	public class Options
+	{
+		[Option('s', "suffix", Required = false, Default = "-変換後", HelpText = "変換後のファイル名に追加する文字列．")]
+		public string Suffix { get; set; }
+
+		//[Option('v', "vsebose", Required = false, HelpText = "samle")]
+		//public bool Verbose { get; set; }
+
+		[Option('u', "upperlimit", Required = false, Default = 800, HelpText = "波長[nm]の最大値")]
+		public int UpperLimit { get; set; }
+
+		[Option('l', "lowerlimit", Required = false, Default = 350, HelpText = "波長[nm]の最小値")]
+		public int LowerLimit { get; set; }
+
+	}
+	static class CommandLineApp
 	{
 		public static void RunApplication(string[] args)
 		{
-			foreach (var arg in args)
+			var options = new Options();
+			//var isSuccess = 
+			Parser.Default.ParseArguments<Options>(args).WithParsed(o =>
 			{
-				var info = new FileInfo(arg);
+				WriteLine($"suffix: {o.Suffix}");
+			});
+			
+		}
 
-				if (!info.Exists)
+		private static void ConvertOneFile(string arg)
+		{
+			FileInfo info = new FileInfo(arg);
+
+			if (!info.Exists)
+			{
+				WriteLine($"\t{info.Name}: エラー: ファイルが存在しません");
+				return;
+			}
+
+			var checker = new DataFormatChecker();
+			if (!checker.IsValid(arg))
+			{
+				WriteLine($"\t{info.Name}: エラー: データの形式が間違っていないか確認してください");
+				return;
+			}
+
+			var data = ReadLines(arg).Skip(18).SkipLast(2)
+				.Select(x =>
 				{
-					WriteLine($"\t{info.Name}: エラー: ファイルが存在しません");
-					continue;
-				}
-
-
-				if (
-					!ReadLines(arg).Skip(30).Take(10)
-					.All(x => Regex.IsMatch(x, @"[0-9\.]*\t[\-0-9\.]*"))
-					)
-				{
-					WriteLine($"\t{info.Name}: エラー: データの形式が間違っていないか確認してください");
-					continue;
-				}
-
-				var data = ReadLines(arg).Skip(18).SkipLast(2)
-					.Select(x =>
-					{
-						var t = x.Split('\t');
+					var t = x.Split('\t');
 #if NETCOREAPP2_0
-						return (double.Parse(t[0]), double.Parse(t[1]));
+					return (double.Parse(t[0]), double.Parse(t[1]));
 #else
 						return new { Item1 = double.Parse(t[0]), Item2 = double.Parse(t[1]) };
 #endif
-					});
-				var absdata = new Absdata(
+				});
+			var absdata = new Absdata(
 #if NETCOREAPP2_0
 					data.Select(x => x.Item1), data.Select(x => x.Item2)
 #else
 					data.Select(x => x.Item1), data.Select(x => x.Item2)
 #endif
 					);
-				var newFileName = info.DirectoryName + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(info.Name) + "-simplified.txt";
+			var newFileName = info.DirectoryName + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(info.Name) + "-simplified.txt";
 
-				WriteAllLines(newFileName, absdata.GetConvertedAbs().Select(x => x.ToString("0.0000")));
-				WriteLine($"\t{arg} \t->\t {newFileName}");
-			}
+			WriteAllLines(newFileName, absdata.GetConvertedAbs().Select(x => x.ToString("0.0000")));
+			WriteLine($"\t{arg} \t->\t {newFileName}");
 		}
 	}
+
+
 	class Absdata
 	{
 
