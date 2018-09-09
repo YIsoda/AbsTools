@@ -48,6 +48,9 @@
     <Compile Include="..\AbsConvertCore\AbsCore.cs">
       <Link>AbsCore.cs</Link>
     </Compile>
+    <Compile Include="..\AbsConvertCore\CommandLine.cs">
+      <Link>CommandLine.cs</Link>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

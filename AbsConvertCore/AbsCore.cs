@@ -24,54 +24,6 @@ namespace AbsConvertCore
 	}
 #endif
 
-	static class CommandLineApplication
-	{
-		public static void RunApplication(string[] args)
-		{
-			foreach (var arg in args)
-			{
-				var info = new FileInfo(arg);
-
-				if (!info.Exists)
-				{
-					WriteLine($"\t{info.Name}: エラー: ファイルが存在しません");
-					continue;
-				}
-
-
-				if (
-					!ReadLines(arg).Skip(30).Take(10)
-					.All(x => Regex.IsMatch(x, @"[0-9\.]*\t[\-0-9\.]*"))
-					)
-				{
-					WriteLine($"\t{info.Name}: エラー: データの形式が間違っていないか確認してください");
-					continue;
-				}
-
-				var data = ReadLines(arg).Skip(18).SkipLast(2)
-					.Select(x =>
-					{
-						var t = x.Split('\t');
-#if NETCOREAPP2_0
-						return (double.Parse(t[0]), double.Parse(t[1]));
-#else
-						return new { Item1 = double.Parse(t[0]), Item2 = double.Parse(t[1]) };
-#endif
-					});
-				var absdata = new Absdata(
-#if NETCOREAPP2_0
-					data.Select(x => x.Item1), data.Select(x => x.Item2)
-#else
-					data.Select(x => x.Item1), data.Select(x => x.Item2)
-#endif
-					);
-				var newFileName = info.DirectoryName + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(info.Name) + "-simplified.txt";
-
-				WriteAllLines(newFileName, absdata.GetConvertedAbs().Select(x => x.ToString("0.0000")));
-				WriteLine($"\t{arg} \t->\t {newFileName}");
-			}
-		}
-	}
 	class Absdata
 	{
 
@@ -150,6 +102,43 @@ namespace AbsConvertCore
 			this.MinWaveLength = minWaveLen;
 			this.MaxWaveLen = maxwaveLen;
 		}
+	}
+
+	class FileFormatChecker
+	{
+		public FileFormatChecker()
+		{
+
+		}
+
+		public bool IsValidFormat(string path)
+		{
+			return ReadLines(path).Skip(30).Take(10).All(x => Regex.IsMatch(x, @"[0-9\.]*\t[\-0-9\.]*"));
+		}
+	}
+
+	class AbsDataLoader
+	{
+		public void LoadFromFile(string path)
+		{
+			var data = ReadLines(path).Skip(18).SkipLast(2)
+				.Select(x =>
+				{
+					var t = x.Split('\t');
+#if NETCOREAPP2_0
+					return (double.Parse(t[0]), double.Parse(t[1]));
+#else
+					return new { Item1 = double.Parse(t[0]), Item2 = double.Parse(t[1]) };
+#endif
+				});
+			WaveLength = data.Select(x => x.Item1);
+			AbsValue = data.Select(x => x.Item2);
+		}
+
+		public IEnumerable<double> WaveLength { get; private set; }
+
+		public IEnumerable<double> AbsValue { get; private set; }
+
 	}
 
 	static class AbsConvertor

@@ -6,7 +6,7 @@
 	{
 		static void Main(string[] args)
 		{
-			CommandLineApplication.RunApplication(args);
+			CommandLineApp.RunApplication(args);
 #if DEBUG
 			ReadKey();
 #endif
