@@ -1,12 +1,13 @@
 ﻿namespace AbsSimplifierForWindows
 {
 	using AbsConvertCore;
+	using static System.Console;
 	class Program
 	{
 		static void Main(string[] args)
 		{
 			CommandLineApplication.RunApplication(args);
-#if Debug
+#if DEBUG
 			ReadKey();
 #endif
 		}
