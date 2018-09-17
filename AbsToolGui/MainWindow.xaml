@@ -1,12 +1,62 @@
 ﻿<Window x:Class="AbsToolGui.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AbsToolGui"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:local="clr-namespace:AbsToolGui"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		Title="Abs"
+		Width="800" Height="450"
+		mc:Ignorable="d">
+	<Window.Resources>
+		<Style TargetType="{x:Type TextBlock}">
+			<Setter Property="FontFamily" Value="Segoe UI,游ゴシック Medium" />
+		</Style>
+		<Style TargetType="{x:Type Button}">
+			<Setter Property="FontFamily" Value="Segoe UI,游ゴシック Medium" />
+		</Style>
+		<Style x:Key="Execute" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+			<Setter Property="FontFamily" Value="Segoe UI SemiBold, 游ゴシック Bold" />
+		</Style>
+	</Window.Resources>
+
+	<Grid>
+		<Button Margin="85,35,0,0"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Top"
+				Click="Button_Click"
+				Content="生データファイルを開く" />
+
+		<ListBox x:Name="RowDataListBox"
+				 Width="570" Height="115"
+				 Margin="85,60,0,0"
+				 HorizontalAlignment="Left"
+				 VerticalAlignment="Top">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock FontFamily="Segoe UI, 游ゴシック Medium" Text="{Binding Name}" />
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+
+		<TextBlock Margin="85,235,0,0"
+				   HorizontalAlignment="Left"
+				   VerticalAlignment="Top"
+				   Text="波長の範囲が300-800nm（既定），1 nm単位のデータをファイルに出力します。出力ファイル名には -変換済（既定）が付きます"
+				   TextWrapping="Wrap" />
+
+		<Expander Width="100" Height="100"
+				  Margin="85,295,0,0"
+				  HorizontalAlignment="Left"
+				  VerticalAlignment="Top"
+				  Header="Expander">
+			<Grid Background="#FFE5E5E5" />
+		</Expander>
+
+		<Button Width="75"
+				Margin="540,295,0,0"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Top"
+				Click="Button_Click_1" Content="変換"
+				Style="{StaticResource Execute}" />
+	</Grid>
 </Window>
