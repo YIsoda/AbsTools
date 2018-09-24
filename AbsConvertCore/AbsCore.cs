@@ -71,7 +71,7 @@ namespace AbsConvertCore
 #endif
 			)
 				.SkipWhile((x) => x.wavelen < this.MinWaveLength - 1)
-				.TakeWhile((x) => x.wavelen < this.MaxWaveLen + 1);//.ToList;
+				.TakeWhile((x) => x.wavelen < this.MaxWaveLen + 1);
 
 
 			var range = Enumerable.Range(MinWaveLength, MaxWaveLen - MinWaveLength + 1).ToList();
