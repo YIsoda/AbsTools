@@ -52,9 +52,9 @@ namespace AbsConvertCore
 		{
 			if (x1 > x && x2 > x) throw new ArgumentException($"{nameof(x)}は既知の{nameof(x1)}, {nameof(x2)}のいずれよりも小さいです。{nameof(x1)} <= {nameof(x)} <={nameof(x2)}] を満たす値を指定してください");
 			if (x1 < x && x2 < x) throw new ArgumentException($"{nameof(x)}は既知の{nameof(x1)}, {nameof(x2)}のいずれよりも大きいです。{nameof(x1)} <= {nameof(x)} <={nameof(x2)}] を満たす値を指定してください");
-
+			
 			return y1 + (x - x1) * (y2 - y1) / (x2 - x1);
-		}
+		}		
 		/// <summary>
 		/// <see cref="MinWaveLength"/>～<see cref="MaxWaveLen"/>の範囲の整数値の波長に対応する吸光度のリストを返します。
 		/// 
@@ -74,22 +74,43 @@ namespace AbsConvertCore
 				.TakeWhile((x) => x.wavelen < this.MaxWaveLen + 1);
 
 
-			var range = Enumerable.Range(MinWaveLength, MaxWaveLen - MinWaveLength + 1).ToList();
+			var roundedWaveLengths = Enumerable.Range(MinWaveLength, MaxWaveLen - MinWaveLength + 1).ToList();
 
 			var prev = zippedEnumerable.First();
 			int rangeindex = 0;
 
 			foreach (var item in zippedEnumerable.Skip(1))
 			{
-				if (prev.wavelen <= range[rangeindex] && item.wavelen > range[rangeindex])
+				if (prev.wavelen <= roundedWaveLengths[rangeindex] && item.wavelen > roundedWaveLengths[rangeindex])
 				{
-					yield return LinearInterpolation(prev.wavelen, item.wavelen, prev.abs, item.abs, range[rangeindex]);
+					yield return LinearInterpolation(prev.wavelen, item.wavelen, prev.abs, item.abs, roundedWaveLengths[rangeindex]);
 					rangeindex++;
-					if (rangeindex == range.Count - 1) yield break;
+					if (rangeindex == roundedWaveLengths.Count - 1) yield break;
 				}
 				prev = item;
 			}
 
+		}
+		
+		public IEnumerable<double> GetConvertedAbs_Average()
+		{
+			var zippedWavelenAbsPairs = this._waveLength.Zip(_abs, (wavelen, abs) => new { wavelen, abs })
+				.SkipWhile(x => x.wavelen < this.MinWaveLength - 1)
+				.TakeWhile(x => x.wavelen < this.MaxWaveLen + 1);
+
+
+			foreach (var wavelen in Enumerable.Range(MinWaveLength, MaxWaveLen - MinWaveLength + 1))
+			{
+				yield return zippedWavelenAbsPairs
+					.Where(p => p.wavelen >= wavelen - 0.5 && p.wavelen < wavelen + 0.5)
+					.Select(x => x.abs).Average();
+			}
+			//return Enumerable.Range(MinWaveLength, MaxWaveLen - MinWaveLength + 1)
+			//	.Select(
+			//		wavelen => zippedWavelenAbsPairs
+			//			.Where(p => p.wavelen >= wavelen - 0.5 && p.wavelen < wavelen + 0.5)
+			//			.Select(x => x.abs).Average()
+			//);
 		}
 
 		public int MinWaveLength { get; }
