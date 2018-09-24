@@ -94,6 +94,7 @@ namespace AbsConvertCore
 		
 		public IEnumerable<double> GetConvertedAbs_Average()
 		{
+			//300 - 800±1 nm（既定）の範囲を取り出す
 			var zippedWavelenAbsPairs = this._waveLength.Zip(_abs, (wavelen, abs) => new { wavelen, abs })
 				.SkipWhile(x => x.wavelen < this.MinWaveLength - 1)
 				.TakeWhile(x => x.wavelen < this.MaxWaveLen + 1);
