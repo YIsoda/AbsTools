@@ -260,8 +260,6 @@ paket-files/
 __pycache__/
 *.pyc
 
-# Prism Libs
-Resource-Prism/
-
 # Data Files
 pH*.txt
+/Resources-Prism
