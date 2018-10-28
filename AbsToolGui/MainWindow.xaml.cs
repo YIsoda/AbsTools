@@ -41,9 +41,23 @@ namespace AbsToolGui
 
 			if (dialog.ShowDialog() ?? false)
 			{
-				this.RowDataListBox.ItemsSource = dialog.FileNames.Select(filename => new System.IO.FileInfo(filename));
+				AddFilesToListBox(dialog.FileNames.Select(filename => new System.IO.FileInfo(filename)));
 			}
 		}
+
+		private void AddFilesToListBox(IEnumerable<FileInfo> info)
+		{
+			var checker = new FileFormatChecker();
+			this.RowDataListBox.ItemsSource =  info
+				.Select(
+					fileinfo=>new
+					{
+						FileInfo = fileinfo,
+						StateString = checker.IsValidFormat(fileinfo.FullName)?"":"無効なファイル形式です"
+					}
+				);
+		}
+
 
 		private void Button_Click_1(object sender, RoutedEventArgs e)
 		{
@@ -53,13 +67,13 @@ namespace AbsToolGui
 			};
 			if (dialog.ShowDialog() == Microsoft.WindowsAPICodePack.Dialogs.CommonFileDialogResult.Ok)
 			{
-				Export(this.RowDataListBox.ItemsSource.OfType<FileInfo>(),dialog.FileName);
+				Export(this.RowDataListBox.ItemsSource.OfType<FileInfo>(), dialog.FileName);
 			}
 		}
 
 
 
-		public void Export(IEnumerable<FileInfo> args,string exportFolder)
+		public void Export(IEnumerable<FileInfo> args, string exportFolder)
 		{
 			foreach (var info in args)
 			{
@@ -81,5 +95,13 @@ namespace AbsToolGui
 			}
 		}
 
+		private void RowDataListBox_Drop(object sender, DragEventArgs e)
+		{
+			AddFilesToListBox(
+				((string[])e.Data.GetData(DataFormats.FileDrop))
+				.Select(filename => new FileInfo(filename))
+				.Where(fileinfo=>fileinfo.Extension=="txt"|| fileinfo.Extension==".txt")
+				);
+		}
 	}
 }
