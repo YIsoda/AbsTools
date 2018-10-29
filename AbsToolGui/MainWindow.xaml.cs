@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Collections.ObjectModel;
 namespace AbsToolGui
 {
 	using AbsConvertCore;
@@ -48,14 +48,20 @@ namespace AbsToolGui
 		private void AddFilesToListBox(IEnumerable<FileInfo> info)
 		{
 			var checker = new FileFormatChecker();
-			this.RowDataListBox.ItemsSource =  info
-				.Select(
-					fileinfo=>new
-					{
-						FileInfo = fileinfo,
-						StateString = checker.IsValidFormat(fileinfo.FullName)?"":"無効なファイル形式です"
-					}
-				);
+			MyFileList list = this.DataContext as MyFileList;
+
+			foreach (var item in info)
+			{
+				list.FileStates.Add(new FileState { FileInfo = item, StateString = checker.IsValidFormat(item.FullName) ? "" : "無効なファイル形式です" });
+			}
+			//this.RowDataListBox.ItemsSource =  info
+			//	.Select(
+			//		fileinfo=>
+			//		(
+			//			fileinfo,
+			//			checker.IsValidFormat(fileinfo.FullName)?"":"無効なファイル形式です"
+			//		)
+			//	);
 		}
 
 
@@ -65,9 +71,16 @@ namespace AbsToolGui
 			{
 				IsFolderPicker = true
 			};
+			var checker = new FileFormatChecker();
 			if (dialog.ShowDialog() == Microsoft.WindowsAPICodePack.Dialogs.CommonFileDialogResult.Ok)
 			{
-				Export(this.RowDataListBox.ItemsSource.OfType<FileInfo>(), dialog.FileName);
+				var fileinfolist = new List<FileInfo>();
+				foreach (FileState item in this.RowDataListBox.ItemsSource)
+				{
+					if(checker.IsValidFormat(item.FileInfo.FullName))
+						fileinfolist.Add(item.FileInfo);
+				}
+				Export(fileinfolist, dialog.FileName);
 			}
 		}
 
@@ -100,8 +113,32 @@ namespace AbsToolGui
 			AddFilesToListBox(
 				((string[])e.Data.GetData(DataFormats.FileDrop))
 				.Select(filename => new FileInfo(filename))
-				.Where(fileinfo=>fileinfo.Extension=="txt"|| fileinfo.Extension==".txt")
+				.Where(fileinfo => fileinfo.Extension == "txt" || fileinfo.Extension == ".txt")
 				);
+		}
+
+		private void Button_Click_Delete(object sender, RoutedEventArgs e)
+		{
+			MyFileList list = this.DataContext as MyFileList;
+			
+		}
+	}
+
+	public class FileState
+	{
+		public FileInfo FileInfo { get; set; }
+		public string StateString { get; set; }
+
+		public override string ToString() => FileInfo.Name;
+	}
+
+	public class MyFileList
+	{
+		public ObservableCollection<FileState> FileStates { get; private set; }
+
+		public MyFileList()
+		{
+			this.FileStates = new ObservableCollection<FileState>();
 		}
 	}
 }
