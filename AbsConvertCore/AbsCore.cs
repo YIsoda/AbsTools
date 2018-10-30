@@ -57,7 +57,6 @@ namespace AbsConvertCore
 		}
 		/// <summary>
 		/// <see cref="MinWaveLength"/>～<see cref="MaxWaveLen"/>の範囲の整数値の波長に対応する吸光度のリストを返します。
-		/// 
 		/// </summary>
 		/// <returns></returns>
 		public IEnumerable<double> GetConvertedAbs()
@@ -81,11 +80,12 @@ namespace AbsConvertCore
 
 			foreach (var item in zippedEnumerable.Skip(1))
 			{
+				// max; range[500](=800)
 				if (prev.wavelen <= range[rangeindex] && item.wavelen > range[rangeindex])
 				{
 					yield return LinearInterpolation(prev.wavelen, item.wavelen, prev.abs, item.abs, range[rangeindex]);
+					if (rangeindex == range.Count - 1) yield break;// 500 == range.Count(300..800 = 501) - 1
 					rangeindex++;
-					if (rangeindex == range.Count - 1) yield break;
 				}
 				prev = item;
 			}

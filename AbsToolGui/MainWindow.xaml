@@ -45,10 +45,10 @@
 
 			<ListBox.ItemTemplate>
 				<DataTemplate>
-					<StackPanel Orientation="Horizontal">
+					<StackPanel Orientation="Horizontal" >
 						<!--<Button Content="×" Click="Button_Click_Delete"/>-->
 						<TextBlock FontFamily="Segoe UI, 游ゴシック Medium"
-								   Text="{Binding FileInfo.Name}" />
+								   Text="{Binding FileInfo.Name}" IsEnabled="False"/>
 						<TextBlock Margin="5,0,0,0"
 								   Text="{Binding StateString}" />
 					</StackPanel>
@@ -73,18 +73,35 @@
 			<Grid Background="#FFE5E5E5" />
 		</Expander>
 		-->
-		<Button Width="76"
-				Margin="0,0,84.5,37.5"
-				HorizontalAlignment="Right"
-				Click="Button_Click_1"
-				Content="変換"
-				Style="{StaticResource Execute}"
-				Height="20"
-				VerticalAlignment="Bottom" />
 		<TextBlock Width="295"
 				   Margin="85,34,0,0"
 				   HorizontalAlignment="Left"
 				   VerticalAlignment="Top"
 				   Text="生データファイルをドラッグアンドドロップ　または" />
+		<Button MinWidth="76"
+				Margin="0,0,37.5,37.5"
+				HorizontalAlignment="Right"
+				Click="Button_Click_1"
+				Content="出力フォルダを選択して変換"
+				Style="{StaticResource Execute}"
+				Height="20"
+				VerticalAlignment="Bottom" />
+		<Button Width="Auto" MinWidth="76"
+				Margin="0,0,222.5,37.5"
+				HorizontalAlignment="Right"
+				Click="Button_Click_2"
+				Content="元のフォルダに出力"
+				Style="{StaticResource Execute}"
+				Height="20"
+				VerticalAlignment="Bottom" />
+		<Button Width="Auto"
+				MinWidth="76"
+				Margin="0,0,362.5,37.5"
+				HorizontalAlignment="Right"
+				Click="Button_Click_3"
+				Content="1ファイルに出力"
+				Style="{StaticResource Execute}"
+				Height="20"
+				VerticalAlignment="Bottom" IsEnabled="True" />
 	</Grid>
 </Window>
