@@ -1,8 +1,6 @@
 # AbsTools
 
-化学実験Aで吸光度の測定データを前処理するツール（群）です。
-
-現時点ではコマンドライン上で動きます
+化学実験A/化学実験B2で吸光度の測定データを前処理するツール（群）です。
 
 現時点で対応しているプラットフォーム：
   - Windows GUI (ウィンドウが表示されてマウスとかで操作できるやつ)
@@ -14,10 +12,10 @@
 
 ### Windows GUI版
 
-[リリースページ](https://github.com/YIsoda/AbsTools/releases)から[AbsSimplifierGUI.exe](https://github.com/YIsoda/AbsTools/releases/download/v0.2.1/AbsSimplifierGUI.exe)をダウンロードしてください。
+[リリースページ](https://github.com/YIsoda/AbsTools/releases/v0.2.1)から[AbsSimplifierGUI.exe](https://github.com/YIsoda/AbsTools/releases/download/v0.2.1/AbsSimplifierGUI.exe)をダウンロードしてください。
 ダウンロードしたファイルをダブルクリックすると以下のように窓が開きます。
 
-![](window.png)
+![](window-initial.png)
 
 リストのところに前処理したいファイルをドラッグ＆ドロップすると読み込まれるので，**1ファイルに出力**，**元のフォルダに出力**，**出力フォルダを指定して変換**のいずれかをクリックして保存してください。
 **1ファイルに出力**の場合のみ，一覧にあるファイルが1ファイルに統合されてTSV形式で保存されます。Excelで開いて編集した後は名前を付けて保存してください。
