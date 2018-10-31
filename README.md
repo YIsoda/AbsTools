@@ -13,9 +13,9 @@
 ### Windows GUI版
 
 [リリースページ](https://github.com/YIsoda/AbsTools/releases/v0.2.1)から[AbsSimplifierGUI.exe](https://github.com/YIsoda/AbsTools/releases/download/v0.2.1/AbsSimplifierGUI.exe)をダウンロードしてください。
-ダウンロードしたファイルをダブルクリックすると以下のように窓が開きます。
+ダウンロードしたファイルをダブルクリックすると以下のように窓が開きます（※現時点では署名などきちんとしていないのでSmartScreenで実行がロックされると思います。［詳細］とか押して実行してください...）。
 
-![](window-initial.png)
+![](window-initial.PNG)
 
 リストのところに前処理したいファイルをドラッグ＆ドロップすると読み込まれるので，**1ファイルに出力**，**元のフォルダに出力**，**出力フォルダを指定して変換**のいずれかをクリックして保存してください。
 **1ファイルに出力**の場合のみ，一覧にあるファイルが1ファイルに統合されてTSV形式で保存されます。Excelで開いて編集した後は名前を付けて保存してください。
