@@ -156,6 +156,10 @@ namespace AbsToolGui
 				System.Diagnostics.Process.Start(item);
 			}
 		}
+		//private string GetInitialFolder()
+		//{
+
+		//}
 		/// <summary>
 		/// export one file
 		/// </summary>
@@ -165,7 +169,8 @@ namespace AbsToolGui
 		{
 			var dialog = new Microsoft.Win32.SaveFileDialog()// Microsoft.WindowsAPICodePack.Dialogs.CommonSaveFileDialog()
 			{
-
+				Title = "名前を付けて保存（1ファイルにまとめて出力）",
+				Filter = "TSV(タブ区切り形式)ファイル|*.tsv"
 			};
 			dialog.DefaultExt = "tsv";
 
