@@ -5,11 +5,23 @@
 現時点ではコマンドライン上で動きます
 
 現時点で対応しているプラットフォーム：
+  - Windows GUI (ウィンドウが表示されてマウスとかで操作できるやつ)
   - Windows Command Line
-  - （パッケージ化の方法がわからないけど暫定で）macOS Command Line
+  - （開発中）macOS Command Line
  
 ## 使い方
 生データのテキストファイルから，波長を1 nmごと，300-799 nmの範囲に対応させた吸光度のデータのみを含むファイルを生成します。
+
+### Windows GUI版
+
+[リリースページ](https://github.com/YIsoda/AbsTools/releases)から[AbsSimplifierGUI.exe](https://github.com/YIsoda/AbsTools/releases/download/v0.2.1/AbsSimplifierGUI.exe)をダウンロードしてください。
+ダウンロードしたファイルをダブルクリックすると以下のように窓が開きます。
+
+![](window.png)
+
+リストのところに前処理したいファイルをドラッグ＆ドロップすると読み込まれるので，**1ファイルに出力**，**元のフォルダに出力**，**出力フォルダを指定して変換**のいずれかをクリックして保存してください。
+**1ファイルに出力**の場合のみ，一覧にあるファイルが1ファイルに統合されてTSV形式で保存されます。Excelで開いて編集した後は名前を付けて保存してください。
+
 ### Windows Command Line版
 
 [リリースページ](https://github.com/YIsoda/AbsTools/releases)から[AbsSimplifier.exe](https://github.com/YIsoda/AbsTools/releases/download/v0.1/AbsSimplifier.exe)をダウンロードして，適当な場所においてください。
